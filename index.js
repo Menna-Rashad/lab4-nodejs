@@ -28,13 +28,17 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Connect to MongoDB
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+const dbURI = process.env.MONGO_URI;
+
+// الاتصال بـ MongoDB Atlas باستخدام Mongoose
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Successfully connected to MongoDB Atlas');
   })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("Error connecting to MongoDB", err));
+  .catch((err) => {
+    console.error('Error connecting to MongoDB Atlas:', err);
+  });
+
   const userRoutes = require("./routes/users");
 
   app.use("/api/v1/users", userRoutes);
